@@ -1,0 +1,139 @@
+/* header */
+.header{
+  background: #fff;
+}
+/* sub_header */
+.sub_header{
+  border-bottom: 1px solid #bbb;
+}
+.sh_layout{
+  width: 1200px;
+  margin: 0 auto;
+  padding: 16px 0;
+}
+.sh_layout::after{
+  content: '';
+  display: block;
+  clear: both;
+}
+.sh_list{
+  float: right;
+}
+.translation_box{
+  float: left;
+}
+.translation_lists{
+  float: left;
+  margin-left: 20px;
+}
+.translation_anchor{
+  display: inline-block;
+  position: relative;
+  line-height: 18px;
+  color: #bbb;
+}
+.translation_anchor::before{
+  content: '';
+  position: absolute;
+  background: #bbb;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  left: -10px;
+  top: 50%;
+  margin-top: -1px;
+}
+.sub_number{
+  color: #999;
+  float: left;
+  margin-left: 40px;
+  font-size: 14px;
+  line-height: 18px;
+}
+.online_link{
+  float: left;
+  margin-left: 40px;
+  line-height: 18px;
+}
+.online_anchor{
+  color: #333;
+  background: url(img/sub_header_link.png) no-repeat;
+  padding-left: 25px;
+  font-size: 14px;
+}
+
+/* main_header */
+.mh_layout{
+  width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.mh_listbox{
+  margin-left: 165px;
+  text-align: center;
+}
+.mh_listbox::after{
+  content: '';
+  display: block;
+  clear: both;;
+}
+.mh_lists{
+  position: relative;
+  float: left;
+  box-sizing: border-box;
+  width: 147px;
+}
+.mh_lists > a{
+  display: inline-block;
+  width: 100%;
+  padding: 28px 0;
+}
+/* main_header log */
+.log{
+  position: absolute;
+  left: 0;
+  top: 28px;
+}
+/* dropdown_nav */
+.dropdown_nav{
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  height: 0px;
+  overflow: hidden;
+  transition: .3s;
+}
+.dropdown_layout{
+  width: 1200px;
+  margin: 0 auto;
+}
+.lists_common{
+  float: left;
+  width: 146px;
+  height: 100vh;
+  padding: 18px 0;
+  border-left: 1px solid #ddd;
+  text-align: center;
+}
+.droplists1{
+  margin-left: 165px;
+}
+.droplists7{
+  border-right: 1px solid #ddd;
+}
+.droplists > a{
+  color: #666;
+  display: inline-block;
+  width: 100%;
+  padding: 9px 0;
+  line-height: 20px;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+}
+.droplists > a:hover{
+  color: rgb(0, 0, 0);;
+}
+/* header effect */
+.header.header_active .show_nav{
+  height: 264px;
+}
