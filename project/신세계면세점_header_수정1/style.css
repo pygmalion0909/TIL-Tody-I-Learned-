@@ -1,0 +1,93 @@
+#header{
+  /* background: crimson; */
+}
+#header_layout{
+  /* background: cadetblue; */
+  width: 1200px;
+  margin: 0 auto;
+}
+/* main_header */
+.main_header{
+  position: relative;
+}
+.main_header::before{
+  content: '';
+  background-color: #f9f9f9;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 76px;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  transition: visibility 0s .4s;
+}
+.main_header .h_list_box{
+  position: relative;
+  margin-left: 165px;
+}
+.main_header .h_list_box::after{
+  content: '';
+  display: block;
+  clear: both;
+}
+.h_list_box .h_lists{
+  float: left;
+  width: 146px;
+  text-align: center;
+}
+.h_lists .h_ankor{
+  color: #535353;
+  display: inline-block;
+  width: 100%;
+  padding: 28px 0;
+  font-size: 16px;
+  letter-spacing: -1px;
+}
+.h_droplist_box{
+  max-height: 0px;
+  transition: max-height .6s, padding .8s;
+  overflow: hidden;
+}
+.h_droplists{
+}
+.h_droplists::before{
+  content: '';
+  background: #ddd;
+  position: absolute; 
+  top: 76px;
+  bottom: 0;
+  width: 1px;
+  margin-left: 72px;
+}
+.h_droplists .drop_ankor{
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+  color: #666;
+  letter-spacing: -0.3px;
+  padding: 9px 0;
+}
+/* main_header_effect */
+#header.on_switch .h_droplist_box{
+  max-height: 300px;
+  padding: 18px 0;
+  transition: max-height .5s;
+}
+#header.on_switch .h_droplists{
+  display: block;
+}
+#header.on_switch .main_header{
+  border-bottom: 1px solid #ddd;
+}
+#header.on_switch .main_header::before{
+  border-top: 1px solid #ddd;
+}
+#header.on_switch .main_header::before{
+  visibility: visible;
+  transition: display 0s;
+}
+/* sub_header */
+.sub_header{
+  border-bottom: 1px solid #ddd;
+}
