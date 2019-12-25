@@ -1,0 +1,109 @@
+#warp{
+  margin: 100px auto;
+  width: 1200px;
+}
+#banner_box{
+  margin: 0 auto;
+  width: 387px;
+}
+.banner_upper_box{
+  position: relative;
+  overflow: hidden;
+}
+.backimg_anchor{
+  position: relative;
+}
+.backimg_anchor:hover .back_img{
+  transform: scale(1.1);
+}
+.backimg_anchor .back_img{
+  vertical-align: top;
+  transition: .8s;
+}
+.banner_logo_box{
+  position: absolute;
+  top: 45px;
+  left: 30px;
+}
+.banner_logo_img{
+  width: 140px;
+  height: 73px;
+}
+.line_btn{
+  background: url(img/icon.png);
+  background-position: -60px -40px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 37px;
+  height: 33px;
+  cursor: pointer;
+}
+.line_btn:hover{
+  background: url(img/icon.png);
+  background-position: -60px 0px;
+}
+.banner_upper_box .link_box{
+  position: absolute;
+  top: 135px;
+  left: 30px;
+}
+.link_box .link_lists{
+  margin-top: 7px;
+}
+.link_lists .list_anchor{
+  background: rgba(0, 0, 0, 0.486);
+  color: #fff;
+  display: inline-block;
+  padding: 3px 7px;
+  font-size: 16px;
+  line-height: 26px;
+}
+.link_lists .list_anchor:hover{
+  background: #000000;
+}
+.amore_tag_box{
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  margin: 0 10px;
+}
+.amore_text{
+  background: #12c2ff;
+  color: #fff;
+  border-radius: 10px;
+  padding: 4px 8.5px;
+  font-size: 12px;
+  font-weight: 100;
+  letter-spacing: 0;
+}
+/* banner_lower_box */
+.banner_lower_box{
+  background: rgba(211, 211, 211, 0.075);
+  text-align: center;
+  padding: 18px 20px 19px;
+}
+.banner_lower_box .event_anchor{
+  display: inline-block;
+  transition: .3s;
+  padding: 0 10px;
+  font-size: 13px;
+  border: 1px solid #333;
+  border-radius: 15px;
+  line-height: 22px;
+  height: 22px;
+}
+.banner_lower_box .event_anchor:hover{
+  background: #12c2ff;
+  color: #fff;
+  border: 1px solid #fff;
+}
+.banner_lower_box .banner_name{
+  margin-top: 10px;
+  font-size: 20px;
+}
+.banner_lower_box .banner_date{
+  color: #666;
+  margin-top: 10px;
+  font-size: 16px;
+}
