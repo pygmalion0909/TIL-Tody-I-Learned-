@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="superPil">
+	<meta name="keywords" content="HTML, CSS, coding, study, project, superPil">
+	<meta name="description" content="product project">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  <title>product Box</title>
+</head>
+<body>
+  <div id="warp">
+    <!-- front_product_box -->
+    <div id="front_product_box">
+      <!-- product_img_box -->
+      <div id="product_img_box">
+        <img src="./img/product.jpg" alt="">
+      </div>
+      <!-- product_price_box -->
+      <div id="product_infor_box">
+        <div id="product_state_box">
+          <span class="state_text">NEW</span>
+        </div>
+        <div id="product_title_box">
+          <h1 class="title">PRODUCTNAME</h1>
+          <h2 class="subtitle">MEN'S RUNNING SHIRT</h2>
+        </div>
+        <ul id="product_grade_box">
+          <li class="grade_lists">
+            <i class="fas fa-star"></i>
+          </li>
+          <li class="grade_lists">
+            <i class="fas fa-star"></i>
+          </li>
+          <li class="grade_lists">
+            <i class="fas fa-star"></i>
+          </li>
+          <li class="grade_lists">
+            <i class="fas fa-star"></i>
+          </li>
+          <li class="grade_lists">
+            <i class="far fa-star"></i>
+          </li>
+        </ul>
+        <div id="product_price_box">
+          <span class="now_price">£9.00</span>
+          <span class="befor_price"> £18.00</span>
+        </div>
+      </div>
+    </div>
+    <!-- details_product_box -->
+    <input type="checkbox" name="show_details" id="details_btn">
+    <label for="details_btn">Details</label>
+    <div id="details_product_box">
+      <div class="size_select_box">
+        <p class="size_title">SIZE</p>
+        <ul class="size_list_box">
+          <li class="lists">
+            <input type="radio" name="size_group" id="seleting_size1">
+            <label for="seleting_size1">S</label>
+          </li>
+          <li class="lists">
+            <input type="radio" name="size_group" id="seleting_size2">
+            <label for="seleting_size2">M</label>
+          </li>
+          <li class="lists">
+            <input type="radio" name="size_group" id="seleting_size3">
+            <label for="seleting_size3">L</label>
+          </li>
+          <li class="lists">
+            <input type="radio" name="size_group" id="seleting_size4" checked>
+            <label for="seleting_size4">XL</label>
+          </li>
+        </ul>
+      </div>
+      <div class="color_select_box">
+        <p class="color_title">COLOR</p>
+        <ul class="color_list_box">
+          <li class="lists">
+            <input type="radio" name="color_group" id="seleting_color1" checked>
+            <label for="seleting_color1"></label>
+          </li>
+          <li class="lists">
+            <input type="radio" name="color_group" id="seleting_color2">
+            <label for="seleting_color2"></label>
+          </li>
+          <li class="lists">
+            <input type="radio" name="color_group" id="seleting_color3">
+            <label for="seleting_color3"></label>
+          </li>
+        </ul>
+      </div>
+      <div class="product_description_box">
+        <p class="description_text">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo facilis ut maiores saepe necessitatibus, iste quas eligendi voluptatibus nesciunt aperiam atque esse officiis nemo neque. Mollitia accusantium iure illum ducimus?
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

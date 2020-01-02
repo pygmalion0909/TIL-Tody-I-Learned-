@@ -1,0 +1,207 @@
+#warp{
+  width: 300px;
+  margin: 100px auto;
+  position: relative;
+}
+/* product_img_box */
+#product_img_box{
+  width: 100%;
+  height: 330px;
+  border-bottom: 8px solid #0099e5;
+}
+#product_img_box > img{
+  vertical-align: top;
+  width: 100%;
+  height: 100%;
+}
+/* product_infor_box */
+#product_infor_box{
+  background: #ffffff;
+  position: relative;
+  padding: 20px;
+}
+/* product_state_box */
+#product_state_box{
+  position: absolute;
+  right: 15px;
+  top: 20px;
+}
+#product_state_box .state_text{
+  background: #0099e5;
+  color: #ffff;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+/* product_title_box */
+#product_title_box .title{
+  color: rgb(33, 37, 41);
+  font-size: 17px;
+  font-weight: 900;
+  padding: 3px;
+  letter-spacing: 1px;
+}
+#product_title_box .subtitle{
+  color: #b1b1b3;
+  font-size: 12px;
+  padding: 3px;
+  letter-spacing: 0.5px;
+}
+/* product_grade_box */
+#product_grade_box::after{
+  content: '';
+  display: inline-block;
+  clear: both;
+}
+#product_grade_box .grade_lists{
+  float: left;
+  margin-left: 5px;
+}
+#product_grade_box .grade_lists > i{
+  font-size: 10px;
+  letter-spacing: 5px;
+}
+/* product_price_box */
+#product_price_box .now_price{
+  color: #0099e5;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 3px;
+}
+#product_price_box .befor_price{
+  font-size: 17px;
+  text-decoration: line-through;
+  margin-left: 5px;
+}
+/* details_product_box */
+input[type="checkbox"]{
+  display: none;
+}
+input[type="checkbox"] + label{
+  background: #ffffff;
+  position: absolute;
+  left: 0;
+  top: -15px;
+  z-index: -1;
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  height: 80px;
+  letter-spacing: 7px;
+  padding: 10px 4px;
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  transform: scale(.9);
+  transition: .5s;
+  cursor: pointer;
+}
+#details_product_box{
+  background: #ffffff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 330px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  z-index: -1;
+  transform: scale(.9);
+  transition: .5s;
+}
+/* details_product_box effect */
+#warp:hover input[type="checkbox"] + label{
+  top: -40px;
+}
+input[type="checkbox"]:checked + label{
+  top: -40px;
+  transform: scale(1);
+  z-index: 2;
+  font-weight: bold;
+}
+input[type="checkbox"]:checked ~ #details_product_box{
+  transform: scale(1);
+  top: 0px;
+  z-index: 3;
+}
+/* size_select_box */
+.size_select_box .size_title{
+  font-size: 14px;
+}
+.size_select_box .size_list_box{
+  margin-left: -5px;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+.size_select_box .size_list_box::after{
+  content: '';
+  display: block;
+  clear: both;
+}
+.size_list_box .lists{
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 50%;
+  text-align: center;
+}
+.size_list_box .lists input[type="radio"]{
+  display: none;
+}
+.size_list_box .lists input[type="radio"] + label{
+  display: inline-block;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+  cursor: pointer;
+}
+/* size_select_box effect */
+.size_list_box .lists input[type="radio"]:checked + label{
+  background: #0056b3;
+  color: #ffffff;
+}
+/* color_select_box */
+.color_select_box .color_title{
+  font-size: 14px;
+}
+.color_select_box .color_list_box{
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+.color_select_box .color_list_box:after{
+  content: '';
+  display: inline-block;
+  clear: both;
+}
+.color_list_box .lists{
+  float: left;
+}
+.color_list_box .lists input[type="radio"]{
+  display: none;
+}
+.color_list_box .lists input[type="radio"] + label{
+  background: #ffd414;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.color_list_box .lists #seleting_color2 + label{
+  background: #11e95b;
+}
+.color_list_box .lists #seleting_color3 + label{
+  background: #f35e3d;
+}
+/* color_list_box effect */
+.color_list_box .lists input[type="radio"]:checked + label{
+  width: 20px;
+  height: 20px;
+}
+/* product_description */
+.product_description_box .description_text{
+  line-height: 1.5em;
+}
