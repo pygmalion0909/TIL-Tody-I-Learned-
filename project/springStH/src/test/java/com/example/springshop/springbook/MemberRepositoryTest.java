@@ -13,12 +13,13 @@ import com.example.springshop.MemeberRepository;
 class MemberRepositoryTest {
   @Autowired MemeberRepository memeberRepository;
 
-  @Test // 테스트를 하겠다는 선언?!
-  @Transactional  // 엔티티의 데이터 변경은 모두 Transitional에서 이루어 져야한다.
+  @Test
+  @Transactional 
   public void TestMember() throws Exception{
     Member member = new Member();
 
     member.setUsername("memberA");
+
     Long savedId = memeberRepository.save(member);
 
     Member findMember = memeberRepository.find(savedId);
