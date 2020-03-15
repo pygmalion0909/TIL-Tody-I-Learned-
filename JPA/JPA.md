@@ -75,7 +75,17 @@ persistence context는 엔티티를 영구 저장하는 환경으로, 논리적�
 엔티티 매니저( Entity Manager )로 엔티티를 저장( persist() ) , 조회( find() 또는 JPQL , QueryDSL )하면 엔티티 매니저는 그 엔티티를 영속성 컨테스트에 보관하고 관리합니다.
 
 
-<hr>
+
+
+## 8. 매니저 메소드
+### 1. em.find();    // 엔티티 조회
+### 2. em.persist(); // 엔티티 저장
+### 3. em.remove();  // 엔티티 삭제
+### 4. em.flush();   // 영속성 컨텍스트 내용을 데이터베이스에 반영
+### 5. em.detach();  // 엔티티를 준영속 상태로 전환
+### 6. em.merge();   // 준영속 상태의 엔티티를 영속상태로 변경
+### 7. em.clear();   // 영속성 컨텍스트 초기화
+### 8. em.close();   // 영속성 컨텍스트 종료
 
 <strong> 참고자료: </strong>
 1. https://gmlwjd9405.github.io/2019/08/04/what-is-jpa.html
