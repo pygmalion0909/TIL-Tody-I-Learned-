@@ -33,27 +33,27 @@ mybatis.configuration.map-underscore-to-camel-case=true
 ```
 1. spring.datasource.hikari.driver-class-name=
 
-mysql을 사용할 때 java와 mysql을 연동해줄 드라이버
+* mysql을 사용할 때 java와 mysql을 연동해줄 드라이버
 
 2. spring.datasource.hikari.jdbc-url=
 
-mysql주소(default값 : 3306) + 내가 만든 database 이름
+* mysql주소(default값 : 3306) + 내가 만든 database 이름
 
 3. spring.datasource.hikari.username=
 
-mysql의 id (default값 : root)
+* mysql의 id (default값 : root)
 
 4. spring.datasource.hikari.password=
 
-mysql의 비밀번호(개인이 지정한 비밀번호)
+* mysql의 비밀번호(개인이 지정한 비밀번호)
 
 5. spring.datasource.hikari.connection-test-query=
 
-mysql이랑 연동 되었는지 확인할 쿼리
+* mysql이랑 연동 되었는지 확인할 쿼리
 
 6. mybatis.configuration.map-underscore-to-camel-case=
 
-user_score로 작성된 컬럼명을 camelCase로 바꿀지 여부
+* user_score로 작성된 컬럼명을 camelCase로 바꿀지 여부
 
 위와 같이 2가지를 완료하면 Maven에서 mysql을 사용할 것 이라고 인식하고 알아서 라이브러리를 다운받아 spring boot에서 mysql을 사용할 준비를 끝마친다.
 
@@ -64,6 +64,7 @@ MyBatis를 사용하는 이유는?
 
 mysql을 맺고 끝는것을 자동화하고 쿼리를 실행하고 쿼리 수행 결과를 미리 준비해둔 VO에 알아서 셋팅하기 위해
 
+### (1) MyBatis 의존성 추가
 <strong>pom.xml</strong>에 아래와 같이 코드 입력
 ```xml
 <dependency>
@@ -74,6 +75,16 @@ mysql을 맺고 끝는것을 자동화하고 쿼리를 실행하고 쿼리 수�
 ```
 
 <strong>위 1번, 2번을 완료하면 기본적으로 spring boot에서 db를 사용할 준비단계는 끝이 난다. </strong>
+
+
+### (2) MyBatis 환경설정
+
+
+
+
+
+
+
 
 ### 3. DAO 생성
 
