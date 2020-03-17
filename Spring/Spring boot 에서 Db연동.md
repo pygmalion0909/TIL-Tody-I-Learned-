@@ -6,97 +6,85 @@
 
 ## 연동 순서
 ### 1. Spring boot -> MySql 연동
-
-여기서는 Maven을 사용하여 설명한다.
-
-<strong>pom.xml</strong>아래의 코드를 입력한다. 아래코드를 작성하면 srping boot에서 mysql을 의존한다 라는 느낌? 
-
-nodejs에서 사용하고 싶은 모듈을 npm install해서 다운받아 사용하는 것 과 같은 개념이라고 생각하자.
-```xml
-<code>
-  <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <scope>runtime</scope>
-  </dependency>
-</code>
-```
-
-다음으로 <strong>src/main/resources/application.properties<strong>에 아래의 코드 입력한다.
+### (1) application.properties파일에 정의하기
 ```properties
-spring.datasource.hikari.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-spring.datasource.hikari.jdbc-url=jdbc:log4jdbc:mysql://localhost:3306/사용할 데이터베이스명 
+<!-- src/main/resources/application.properties -->
+spring.datasource.hikari.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.hikari.jdbc-url=jdbc:mysql://localhost:3306/st_board?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
 spring.datasource.hikari.username=root
-spring.datasource.hikari.password=mysql비밀번호
+spring.datasource.hikari.password=icandoit
 spring.datasource.hikari.connection-test-query=SELECT 1
-mybatis.configuration.map-underscore-to-camel-case=true
 ```
-1. spring.datasource.hikari.driver-class-name=
+1. jdbc:mysql://localhost:3306/사용할DB이름?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+* 연결할 데이터베이스의 주소를 정함
+* 주소에 유니코드 설정과 UTF-8문자열 인코딩, 그리고 서버의 타임존 설정 추가
 
-* mysql을 사용할 때 java와 mysql을 연동해줄 드라이버
+2. spring.datasource.hikari.username=DB아이디
+* 데이터베이스의 아이디 설정
 
-2. spring.datasource.hikari.jdbc-url=
+3. spring.datasource.hikari.password=DB비밀번호
+* 데이터베이스의 비밀번호 설정
 
-* mysql주소(default값 : 3306) + 내가 만든 database 이름
+4. spring.datasource.hikari.connection-test-query=SELECT
+* 데이터베이스와 정상적으로 연결되는지 확인하기 위한 테스트 쿼리
 
-3. spring.datasource.hikari.username=
+### (2) 히카리CP 란
+* 커넥션 풀이 톰캣에서 히카리CP로 변경
+* 커넥션 풀이란 애플리케이션과 데이터베이스를 연결할 때 이를 효과적으로 관리 하기 위해 사용 되는 라이브러리
 
-* mysql의 id (default값 : root)
+### (3) DatabaseConfiguration 클래스 만들기
+```java
+// src/main/java/board/configuration/DatabaseConfiguration.java
+package com.example.demo.configuration;
 
-4. spring.datasource.hikari.password=
+import javax.sql.DataSource;
 
-* mysql의 비밀번호(개인이 지정한 비밀번호)
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-5. spring.datasource.hikari.connection-test-query=
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-* mysql이랑 연동 되었는지 확인할 쿼리
+@Configuration
+@PropertySource("classpath:/application.properties")
+public class DatabaseConfiguration {
 
-6. mybatis.configuration.map-underscore-to-camel-case=
-
-* user_score로 작성된 컬럼명을 camelCase로 바꿀지 여부
-
-위와 같이 2가지를 완료하면 Maven에서 mysql을 사용할 것 이라고 인식하고 알아서 라이브러리를 다운받아 spring boot에서 mysql을 사용할 준비를 끝마친다.
-
-
-### 2. Spring boot -> MyBatis 연결
-
-MyBatis를 사용하는 이유는?
-
-mysql을 맺고 끝는것을 자동화하고 쿼리를 실행하고 쿼리 수행 결과를 미리 준비해둔 VO에 알아서 셋팅하기 위해
-
-### (1) MyBatis 의존성 추가
-<strong>pom.xml</strong>에 아래와 같이 코드 입력
-```xml
-<dependency>
-  <groupId>org.mybatis.spring.boot</groupId>
-  <artifactId>mybatis-spring-boot-starter</artifactId>
-  <version>2.0.0</version>
-</dependency>
+	
+	@Bean
+	@ConfigurationProperties(prefix="spring.datasource.hikari")
+	public HikariConfig hikariConfig() {
+		return new HikariConfig();
+	}
+	
+	@Bean
+	public DataSource dataSource() throws Exception{
+		DataSource dataSource = new HikariDataSource(hikariConfig());
+		System.out.println(dataSource.toString());
+		return dataSource;
+	}
+	
+}
 ```
+1. @PropertySource("classpath:/application.properties")
+* application.properties을 사용할 수 있도록 설정 파일의 위치를 지정
+* 여기서는 application.properties을 지정했지만 @PropertySource를 사용하여 다른 설정 파일도 사용 가능
 
-<strong>위 1번, 2번을 완료하면 기본적으로 spring boot에서 db를 사용할 준비단계는 끝이 난다. </strong>
+2. @Bean
+   @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    public HikariConfig hikariConfig(){
+    return new HikariConfig();
+   }
+* application.properties에 설정했던 데이터베이스 관련 정보를 사용하도록 지정
+* @ConfigurationProperties에 prefix가 spring.datasource.hikari로 설정되어 있어 spring.datasource.hikari로 시작하는 설정을 이용해 히카리CP의 설정 파일을 만듬
 
-
-### (2) MyBatis 환경설정
-
-
-
-
-
-
-
-
-### 3. DAO 생성
-
-mybatis사용하여 service에서 userDao있는 메소드 실행
-userMapper.xml파일에는 DAO인터페이스에 있는 동일한 이름을 가진 메소드와 메소드 내부에 쿼리가 있어 메소드의 동작이 수행된다.
-
-수행 단계별로 정리해보자.
-1. Service는 UserDao에게 사용자의 요구사항을 전달
-2. UserDao는 사용자의 요구사항이 정의 되어 있는지 userMapper.xml에게 요청
-3. userMapper.xml는 요구사항을 확인하고 있는경우 해당 요구를 실행시켜 결과를 가져온다. 만약 없는 경우 에러를 반환. 여기서 userMapper.xml에 작성된 쿼리문이 db에서 수행하고 결과값을 반환
-4. userDao는 Service에게 결과 반환
-
-이 모든 단계는 MyBatis를 사용하여 동작 시킨다.
+3. public DataSource datasource() throws Exception{
+    DataSource dataSource = new HikariDataSource(hikariConfig());
+    System.out.println(dataSource.toString());
+    return dataSource;
+   }
+* 앞에서 만든 히카리CP의 설정 파일을 이용해서 데이터베이스와 연결하는 데이터 소스 생성
+* 여기서 데이터 소스가 정상적으로 생성되었는지 확인하기 위해 데이터 소스를 출력
 
 
