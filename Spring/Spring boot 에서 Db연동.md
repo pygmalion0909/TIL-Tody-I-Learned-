@@ -5,7 +5,7 @@
 3. MyBatis (MyBatis는 DB의 정보를 읽어오는데 도움을 준다.)
 
 ## 연동 순서
-### 1. Spring boot -> MySql 연동
+## 1. Spring boot -> MySql 연동
 ### (1) application.properties파일에 정의하기
 ```properties
 <!-- src/main/resources/application.properties -->
@@ -31,6 +31,8 @@ spring.datasource.hikari.connection-test-query=SELECT 1
 ### (2) 히카리CP 란
 * 커넥션 풀이 톰캣에서 히카리CP로 변경
 * 커넥션 풀이란 애플리케이션과 데이터베이스를 연결할 때 이를 효과적으로 관리 하기 위해 사용 되는 라이브러리
+* 커넥션 풀에 대한 추가 내용 : 데이터베이스와 연결된 커넥션을 미리 만들어서 풀(pool) 속에 저장해 두고 있다가 필요할 때 커넥션을 풀에서 쓰고 다시 풀에 반환하는 기법, 애플리케이션에서는 데이터베이스의 환경 설정과 연결, 관리 등을 따로 xml파일이나 속성 파일을 사용해서 관리, 다수의 사용자가 데이터베이스에 접근해야 하는 상황일 경우 요청때 마다 db에 연결하는 것은 비효율
+* 커넥션 풀에 대한 추가 내용 : 커넥션 풀에 db와 연결해 놓은 객체를 두고 필요할 때마다 커넥션 풀에서 빌려오고 연결이 끝나면 다시 풀에 돌려줌
 
 ### (3) DatabaseConfiguration 클래스 만들기
 ```java
@@ -87,4 +89,5 @@ public class DatabaseConfiguration {
 * 앞에서 만든 히카리CP의 설정 파일을 이용해서 데이터베이스와 연결하는 데이터 소스 생성
 * 여기서 데이터 소스가 정상적으로 생성되었는지 확인하기 위해 데이터 소스를 출력
 
+## 2. Spring boot -> Mybatis 연동
 
