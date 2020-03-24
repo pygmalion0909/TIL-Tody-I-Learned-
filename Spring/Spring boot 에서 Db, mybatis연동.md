@@ -132,6 +132,7 @@ public class DatabaseConfiguration {
 * classpath는 resources폴더를 의미
 * /mapper/**/는 mapper폴더 밑의 모든 폴더를 의미, 프로젝트의 크기가 구조에 따라 여러개의 매퍼 파일이 있을 수 있고 매퍼 폴더 밑에 다시 여러개의 폴더를 가진 구조가 있을 수 있어 mapper폴더 밑에 많은 폴더가 생성 되더라도 모두 지정될 수 있도록 **(모든 폴더 의미)을 사용
 * /sql-*.xml는 이름이 sql-로 시작하고 확장자가 xml인 모든 파일 의미
+* 만약, /sql-*.xml이 없다면 mapper폴더 안에 전체를 뜻 함
 
 ### (3) Mapper 폴더 생성
 ```java
