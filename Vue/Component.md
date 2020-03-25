@@ -30,7 +30,7 @@
 1. component 등록
 * Vue.component("컴포넌트 이름", {컴포넌트 내용})으로 등록
 
-2. <app-header></app-header>
+2. app-header /app-header
 * 컴포넌트 이름이 html에서는 태그로 작성
 * component의 template속성이 html태그에 적용
 
@@ -62,7 +62,7 @@
 * 지역 컴포넌트란 Vue인스턴스 내부에서 component를 설정하는 것
 * 지역에서는 components이며 s를 빼먹으면 안됨(전역은 component)
 
-2. components: {"app-footer" : {template : " h2 hello superpil! /h2"} },
+2. components: {"app-footer" : {template : " h2 hello superpil! /h2"} }
 * 전역 컴포넌트와 같은 형식
 * app-footer를 html파일에 가서 코드로 작성하면 template의 내용이 먹힘
 
@@ -99,6 +99,7 @@
     new Vue({
       el: "#app2",
     })
+  </script>
 ```
 * 인스턴스 생성하면 vue개발자 도구에서 root가 생성 됨
 * 만약 인스턴스를 2개 만들면 root가 2개 생성됨 
