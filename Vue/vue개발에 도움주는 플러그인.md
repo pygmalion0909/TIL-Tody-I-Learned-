@@ -1,17 +1,18 @@
 # vue개발에 도움주는 플러그인
 
-- Vetur
+* Vetur
 
-- Night Owl
+* Night Owl
 
-- Material Icon Theme
+* Material Icon Theme
 
-- Live Server
+* Live Server
 
-- ESLint
+* ESLint
 
-- Prettier
+* Prettier
 
-- Auto Close Tag
+* Auto Close Tag
 
-- Atom Keymap
+* Atom Keymap
+

@@ -8,8 +8,11 @@
 
 ## 2. 설치
 ```
-npm install @vue/cli
+npm install -g @vue/cli
 ```
+* 터미널에서 위 명령어로 vuecli설치
+* -g 옵션 사용하면 한번 설치에 여러 곳에서 사용 가능
+
 ## 3. 버전확인
 ```
 vue --version
@@ -22,7 +25,8 @@ vue create 프로젝트이름
 ```
 * 프로젝트 구성에 필요한 요소들을 선택하는 안내 나옴(babel, eslint)
 * default로 하면 babel, eslint가 설치 됨
-* Manually select features를 선택하면 vuex, vue-router등 몇가지 더 선택 가능
+* Manually select features를 선택하면 여러가지 기능을 직접 선택해서 구성 가능
+* 기능 설치 후 create할때 만든 프로젝트로 디렉토리 들어가기, 꼭 생성한 디렉토리로 들어가야함, 안들어가면 run했을 때 에러 뜸
 
 ## 5. 프로젝트 폴더 구조 설명
 ### (1) public/index.html
