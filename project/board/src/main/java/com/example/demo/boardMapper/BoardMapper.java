@@ -15,4 +15,8 @@ public interface BoardMapper {
 	
 //	selectBoardDetail메소드는 int boardIdx 형태로 db에  보내고 리턴값은 BoardDto형태로 받겠다.
 	BoardDto selectBoardDetail(int boardIdx) throws Exception;
+	
+	void updateBoard(BoardDto board) throws Exception;
+	
+	void deleteBoard(int boardIdx) throws Exception;
 }

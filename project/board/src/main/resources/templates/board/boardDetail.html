@@ -32,42 +32,41 @@
 					</tr>
 					<tr>
 						<th scope="row">제목</th>
-						<td colspan="3"><input type="text" id="title" name="title" th:value="${board.title }"/></td>
+						<td colspan="3"><input type="text" id="title" name="title" th:value="${board.title}"/></td>
 					</tr>
 					<tr>
 						<td colspan="4" class="view_text">
-							<textarea title="내용" id="contents" name="contents" th:text="${board.contents }"></textarea>
+							<textarea title="내용" id="contents"  name="contents" th:text="${board.contents}"></textarea>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx }">
+			<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx}">
 		</form>
 		
-		<a href="#this" id="list" class="btn">목록으로</a>
-		<a href="#this" id="edit" class="btn">수정하기</a>
-		<a href="#this" id="delete" class="btn">삭제하기</a>
+		<input type="button" id="list" value="목록으로">
+		<input type="button" id="edit" value="수정하기">
+		<input type="button" id="delete" value="삭제하기">
 	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#list").on("click", function(){
-				location.href = "/board/openBoardList.do";
-			});
-			
-			$("#edit").on("click", function(){
-				var frm = $("#frm")[0];
-				frm.action = "/board/updateBoard.do";
-				frm.submit();
-			});
-			
-			$("#delete").on("click", function(){
-				var frm = $("#frm")[0];
-				frm.action = "/board/deleteBoard.do";
-				frm.submit();
-			});
-		});
+		const formSubmit = document.querySelector("#frm");
+		const listBtn = document.querySelector("#list");
+		const editBtn = document.querySelector("#edit");
+		const deleteBtn = document.querySelector("#delete");
+	
+		listBtn.addEventListener("click", () => {
+			location.href= "/board/openBoardList.do";
+		})
+		editBtn.addEventListener("click", () => {
+			formSubmit.action= "/board/updateBoard.do";
+			formSubmit.submit();
+		})
+		deleteBtn.addEventListener("click", () => {
+			formSubmit.action= "/board/deletedBoard.do";
+			formSubmit.submit();
+		})
 	</script>
 </body>
 </html>
