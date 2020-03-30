@@ -2,56 +2,75 @@
   <div class="inputBox shadow">
     <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
     <span class="addContainer" v-on:click="addTodo">
-      <i class="far fa-plus-square addBtn"></i>
+      <i class="addBtn fas fa-plus" aria-hidden="true"></i>
     </span>
+    <Modal v-if="showModal" @close="showModal = false">
+      <h3 slot="header">
+        마!
+        <i class="closeModalBtn fas fa-plus addBtn" @click="showModal=false"></i>
+      </h3>
+      <h4 slot="body"> 내용 입력 해라이! </h4>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Modal from "./common/Modal.vue";
+
 export default {
-  data(){
+  data: function() {
     return {
-      newTodoItem: "",
+      newTodoItem: '',
+      showModal: false,
     }
   },
-  methods:{
-    addTodo(){
-      localStorage.setItem(this.newTodoItem, this.newTodoItem);
-      this.clearInput();
+  methods: {
+    addTodo: function() {
+      if (this.newTodoItem !== '') {
+        this.$emit("addTodoItem", this.newTodoItem);
+        this.clearInput();
+      }else{
+        this.showModal = !this.showModal;
+      }
     },
-    clearInput(){
-      this.newTodoItem = "";
-    },
+    clearInput: function() {
+      this.newTodoItem = '';
+    }
   },
+  components: {
+    Modal: Modal
+  }
 }
 </script>
 
 <style scoped>
-  input:focus{
-    outline: none;
-  }
-  .inputBox{
-    background: white;
-    height: 50px;
-    line-height: 50px;
-    border-radius: 5px;
-  }
-  .inputBox input{
-    border-style: none;
-    font-size: 0.9rem;
-    width: 80%;
-    box-sizing: border-box;
-  }
-  .addContainer{
-    float: right;
-    background: linear-gradient(to right, #6478FB, #8763FB);
-    display: block;
-    width: 3rem;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-  }
-  .addBtn{
-    color: white;
-    vertical-align: middle;
-  }
+input:focus {
+  outline: none;
+}
+.inputBox {
+  background: white;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 5px;
+}
+.inputBox input {
+  border-style: none;
+  font-size: 0.9rem;
+}
+.addContainer {
+  float: right;
+  background: linear-gradient(to right, #6478FB, #8763FB);
+  display: block;
+  width: 3rem;
+  border-radius: 0 5px 5px 0;
+}
+.addBtn {
+  color: white;
+  vertical-align: middle;
+}
+.closeModalBtn{
+  color:#6478FB;
+}
 </style>
+
+
