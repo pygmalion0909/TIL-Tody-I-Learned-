@@ -432,6 +432,12 @@ export default {
 1. li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow"
 * v-for를 사용하면 ()묶고 두번째 자리는 해당 리스트의 index번호를 자동으로 부여함
 * 첫번째 자리는 리스트 vlaue값
+* todoItems는 배열 형태
+* todoItem은 배열에 있는 value를 하나하나
+* 즉, li태그에 각각의 todoItem을 출력함
+* todoItems배열 내부에 value들을 todoItem으로 별칭을 정해서 li태그에 반복해서 하나하나 주입
+* v-for 블럭 내부에서는 todoItem, index를 사용가능
+
 
 2. span class="removeBtn" v-on:click="removeTodo(todoItem, index)"
 * 삭제 버튼을 클릭했을 때 몇번째 리스트인지 알려고 메소드 호출할 때 todoItem이랑 index를 넘김
@@ -1645,7 +1651,9 @@ input:focus {
 * 즉, true로 바꿈
 
 ## 9. 트랜지션
-* 애니매이션 효과 주는 것
+* 애니매이션 효과 등등 여러가기 효과를 주는 것
+
+### (1) 모달
 ```html
 <template>
   <div class="inputBox shadow">
@@ -1722,6 +1730,10 @@ input:focus {
 }
 </style>
 ```
+
+
+
+
 
 ## 10.
 ## 11.
