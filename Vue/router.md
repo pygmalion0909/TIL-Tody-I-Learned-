@@ -226,80 +226,116 @@ export default {
 2. router-link to="/page1"
 * link태그에 to로 경로지정해서 사용자가 쉽게 path경로로 접근하게 함
 
-
-
-<hr>
-
-
-
-
-## 5. router.push()
-* router.push(location, onComplete, onAbort)
-* 인스턴스 내부에서 라우터 인스턴스에 $router로 액세스 할 수 있음
-* 즉, this$router.push 사용 가능
-
-### (1) router.push방식
+## 5. 중첩 router
+* 특정 router의 하위 경로가 변경됨에 따라 컴포넌트를 변경하게 하는 기능
+* page1/subpage1, page1/subpage2가 있다고 한다면
+* router의 children속성을 사용하여 컴포넌트를 지정할 수 있음
 ```js
-// 리터럴
-router.push('home')
+// router.js
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import page1 from './components/page1'
+import subpage1 from './components/subpage1'
+import subpage2 from './components/subpage2'
 
-// object
-router.push({ path: 'home' })
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {
+      path:'/page1',
+      component: page1,
+      children: [ 
+        {path:'subpage1', component: subpage1},
+        {path:'subpage2', component: subpage2},]
+    },
+  ]
+})
+
+export default router
 ```
+1. children: []
+* 사용자 page1으로 들어왔을 때 하위 경로 subpage1, subpage2의 경로에 대한 컴포넌트를 지정하는 속성
 
+2. {path:'subpage1', component: subpage1}
+* path랑 component는 기본적으로 작성 방식으로 적으면 됨
+* 지금 path에 subpage1이라고만 작성 되어 있지만 사실상 앞에 page1이 생략이 되어 있음
+* 즉, 사용자는 page1/subpage1으로 들어와야 해당 컴포넌트가 렌더링 됨
 
+```js
+<template>
+  <div>
+    <h1>page1</h1>
+    <router-view></router-view>
+  </div>
+</template>
 
+<script>
+export default {
+
+}
+</script>
+
+<style>
+</style>
+```
+1. router-view
+* subpage1, subpage2가 렌더링 될 포지션
+* 원하는 위치에 태그를 작성하면 그 위치에 렌더링 됨
+* 이 태그 없으면 suppage화면에 렌더링 안됨
 
 ## 6. this.$router 의미
 * 모든 컴포넌트에서 router를 자주사용함
 * this.$router는 정확히 router와 동일함
 * this.$router를 사용하는 이유는 라우터를 조작해야하는 모든 컴포넌트에서 라우트 객체를 가져올 필요가 없기 때문에 사용
 
+## 7. 동적 router
+* url에 파라미터 값을 router에 들오고기
+* 가령 page1/123 으로 url이 왔을 때 123을 router에 가져오는 것
+```js
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import page1 from './components/page1'
 
+Vue.use(VueRouter)
 
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {path:'/page1/:id', component: page1},
+  ]
+})
+export default router
 
+```
+1. path:'/page1/:id', component: page1
+* 사용자가 /page1/123으로 들어오면 123의 값을 가져올 수 있음
+* 문법은 " :변수명 "으로 하면 됨
 
-## 6. 파라미터값 받기
-* 중첩된 페이지 이동을 말함
-* 첫번째 페이지 들어가고 거기에 a링크가 있어 또 한번더 페이지 들어가는 것
+```js
+<template>
+  <div>
+    <h1>{{this.$route.params.id}}</h1>
+  </div>
+</template>
 
+<script>
+export default {
 
+}
+</script>
 
+<style>
+</style>
+```
+1. {{this.$route.params.passing}}
+* router라이브러리를 다운받았기 때문에 this.$route로 접근 가능 함
+* 위 코드는 예시를 들기위해 컴포넌트에 id값을 출력 시켰음
+* 쿼리문자열은 this.$route.query로 확인 가능
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 6. router 태그
-### (1) router-link
-
-
-
-
-
-
-
-
-
+## 8. router-link
+### (1) 기본사용
 ```html
   <div id="app">
     <div>
@@ -344,10 +380,100 @@ router.push({ path: 'home' })
 * router-link는 화면에 a태그로 변환되어 나옴
 * to를 사용해서 해당 router-link에 url경로 지정
 
+### (2) router-link 스타일
+* router-link에 스타일 적용하는 클래스
+* 경로에 따라 메뉴가 단계별로 구성될 경우 사용하는 듯
+1. .router-link-active는 경로 앞부분만 일치하면 추가되는 클래스
+2. .router-link-exact-active는 모든 경로가 일치해야 추가되는 클래스
+```js
+```
+
+## 9. 데이터 가져오기 (Data Fetching)
+* 서버로부터 데이터를 가져오는 기능
+* 화면별로 라우팅이 일어나는 시점에 데이터를 불러오게 하기
+* 기본적으로 created()훅에서 가져옴
+* created()는 vue의 라이프사이클훅 중에서 한개 임
+
+## 10. router.push()
+* 현재 페이지 갱신?!
+* :key속성이랑 같이 사용!?
+
+* router.push(location, onComplete, onAbort)
+* 인스턴스 내부에서 라우터 인스턴스에 $router로 액세스 할 수 있음
+* 즉, this$router.push 사용 가능
+* push에 지정한 경로로 이동
+
+
+
+## 11. router name
+* router에 별칭을 정하는 것
+
+```js
+// router.js
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import intro from './components/intro'
+import page1 from './components/page1'
+
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {path:'/', component: intro},
+    {path:'/page1', name: 'page1', component: page1},
+  ]
+
+})
+export default router
+```
+1. path:'/page1', name: 'page1', component: page1
+* /page1경로에 별칭으로 page1를 만들어 줌
+
+```js
+<template>
+  <div class="intro">
+    <h1>This HomePage is Test!</h1>
+    <router-link :to="{name:'page1'}">링크</router-link>
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style scoped>
+</style>
+```
+1. router-link :to="{name:'page1'}"
+* name으로 page1라우터를 연결 함
 
 
 
 
+
+
+
+
+
+
+
+
+
+<hr>
+
+
+
+### (1) router.push방식
+```js
+// 리터럴
+router.push('home')
+
+// object
+router.push({ path: 'home' })
+```
 ## 7. Api
 ### (1) router-link
 * 사용자 네비게이션을 간능하게 하는 컴포넌트
@@ -370,15 +496,6 @@ router.push({ path: 'home' })
 8. exact-active-class
 
 ### (2) router-view
-
-
-
-
-
-
-
-
-
 
 
 ## 8. router 속성
