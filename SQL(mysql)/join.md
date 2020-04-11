@@ -56,7 +56,3 @@ select a1.emp_no, a1.first_name, a2.dept_no
 from employees a1, dept_emp a2
 where a1.emp_no = a2.emp_no
 ```
-*
-
-```
-```
