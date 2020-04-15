@@ -1,7 +1,8 @@
 # ArrayList 와 Map
-## 1. ArrayList 예제
+## 1. ArrayList
 1. 데이터값을 넣으면 자동적으로 index가 설정된다.
 2. index가 데이터 넣는 순으로 정해진다.
+### (1) ArrayList 속성
 ```java
 // ArrayList생성
 ArrayList<데이터 타입> 변수명 = new ArrayList<데이터 타입>();
@@ -34,6 +35,9 @@ ArrayList<데이터 타입> 변수명 = new ArrayList<데이터 타입>();
 // 길이
 변수명.size(); // 길이를 알 수 있다.
 ```
+### (2) ArrayList 예제
+
+
 ## 2. Map 예제
 1. kye = value 로 입력한다.
 2. key는 중복이면 안된다.

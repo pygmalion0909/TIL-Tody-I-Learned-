@@ -1,12 +1,19 @@
 # spring boot 에서 DB연동 방법
-## 연동하기 위해 필요한 것 들
+## 1. 연동하기 위해 필요한 것 들
 1. spring boot
 2. DB(mysql)
 3. MyBatis (MyBatis는 DB의 정보를 읽어오는데 도움을 준다.)
 
-## 연동 순서
-## 1. Spring boot -> MySql 연동
-### (1) application.properties파일에 정의하기
+## 2. Spring boot -> MySql 연동
+### (1) dependency 추가
+* 프로젝트 생성 때 mysql dependency 추가 하기
+* 만약 프로젝트 생성 후 추가 할려면 아래 코드를 budild.gradle폴더에 dependency쪽에 추가, 이후 프로젝트에 우클릭 해서 리플레쉬 하면 추가 됨
+```
+compile 'mysql:mysql-connector-java'
+```
+
+### (1) 설정
+1. application.properties파일에 정의하기
 ```properties
 <!-- src/main/resources/application.properties -->
 spring.datasource.hikari.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -96,7 +103,14 @@ public class DatabaseConfiguration {
 * 마이바티스를 사용하지 않고 직접 JDBC를 이용할 경우 개발자가 반복적으로 작성해야 할 코드가 많고 서비스 로직 코드와 쿼리를 분리하기가 어려움
 * 마이바티스는 개발자가 지정한 SQL, 저장프ㅗ시저 그리고 몇 가지 고급 매핑을 지원하는 퍼시스턴스 프레임워크, 마이바티스는 JDBC로 처리하는 상당부분의 코드와 파라미터 설정 및 결과 맵핑을 대신해줌, 마이바티스는 데이터베이스 레코드에 원시타입과 MAP 인터페이스 그리고 자바 POJO를 설정해서 매핑하기 위해 XML과 애노테이션을 사용(마이바티스 홈페이지 글)
 
-### (2) Mybatis 설정
+### (2) dependency 추가
+* spring boot를 사용하면 프로젝트를 만들 때 mybatis를 검색하여 dependency를 쉽게 추가 할 수 있음
+* 프로젝트 생성 후 build.gradle폴더(gradle) 또는 pom.xml(메이븐)에서 확인 할 수 있음
+* dependency 부분에 "org.mybatis.spring.boot" 가 있으면 됨
+* 프로젝트 생성 할 때 dependency 추가 하는 부분에서 jdbc도 추가 해야 되는 듯
+
+
+### (3) Mybatis 설정
 * Mysql과 연결하기 위해 만든 DatabaseConfiguration.java클래스에 추가하기
 ```java
 public class DatabaseConfiguration {
@@ -107,7 +121,7 @@ public class DatabaseConfiguration {
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception{
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/sql-*.xml"));
+		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
 		return sqlSessionFactoryBean.getObject();
 	}
 	
@@ -124,21 +138,16 @@ public class DatabaseConfiguration {
 2. sqlSessionFactoryBean.setDataSource(dataSource);
 * 앞에서 만든 데이터 소스를 설정
 
-3. (applicationContext.getResources("classpath:/mapper/**/sql-*.xml"));
+3. (applicationContext.getResources("classpath:/mapper/**/*.xml"));
 * 마이바티스 매퍼 파일의 위치를 설정
 * 매퍼는 애플리케이션에서 사용할 SQL을 담고 있는 xml파일을 의미
 * 매퍼를 등록할 때에는 매퍼 파일을 하나씩 따로 등록할 수도 있지만 하나의 애플리케이션에는 일반적으로 많은 수의 매퍼 파일이 존재
 * 따라서 패턴을 기반으로 한번에 등록
 * classpath는 resources폴더를 의미
 * /mapper/**/는 mapper폴더 밑의 모든 폴더를 의미, 프로젝트의 크기가 구조에 따라 여러개의 매퍼 파일이 있을 수 있고 매퍼 폴더 밑에 다시 여러개의 폴더를 가진 구조가 있을 수 있어 mapper폴더 밑에 많은 폴더가 생성 되더라도 모두 지정될 수 있도록 **(모든 폴더 의미)을 사용
-* /sql-*.xml는 이름이 sql-로 시작하고 확장자가 xml인 모든 파일 의미
-* 만약, /sql-*.xml이 없다면 mapper폴더 안에 전체를 뜻 함
-
-### (3) Mapper 폴더 생성
-```java
-// src/main/resources/mapper
-mapper폴더 만들기 
-```
+* /*.xml는 이름이 sql-로 시작하고 확장자가 xml인 모든 파일 의미
+* 만약, /*.xml이 없다면 mapper폴더 안에 전체를 뜻 함
+* mapper파일 만들어줘야 설정했을 때 오류 안뜸
 
 ### (2) Mybatis 연결 확인
 ```java
@@ -170,3 +179,65 @@ public class BoardApplicationTests {
 }
 ```
 * 테스트 성공하면 org.mybatis.spring.SqlSessionTemplate@103082dd 가 출력됨
+
+## 3. mysql과 mybatis의 config의 전체적 코드
+```java
+package com.example.domain.config;
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+@Configuration
+@PropertySource("classpath:/application.properties")
+public class ConfigApp {
+//	mybatis 연동
+	@Autowired
+	public ApplicationContext applicationContext;
+//	mysql 연동
+	@Bean
+	@ConfigurationProperties(prefix="spring.datasource.hikari")
+	public HikariConfig hikariConfig() {
+		return new HikariConfig();
+	}
+	
+	@Bean
+	public DataSource dataSource() throws Exception{
+		DataSource dataSource = new HikariDataSource(hikariConfig());
+		System.out.println(dataSource.toString());
+		return dataSource;
+	}
+//	mybatis 연동
+	@Bean
+	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception{
+		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+		sqlSessionFactoryBean.setDataSource(dataSource);
+		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
+		sqlSessionFactoryBean.setConfiguration(mybatisConfig());
+		return sqlSessionFactoryBean.getObject();
+	}
+	
+	@Bean
+	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+//	mybatis 맵핑 설정
+	@Bean
+	@ConfigurationProperties(prefix="mybatis.configuration")
+	public org.apache.ibatis.session.Configuration mybatisConfig(){
+		return new org.apache.ibatis.session.Configuration();
+	}
+	
+}
+```
