@@ -103,14 +103,7 @@ public class DatabaseConfiguration {
 * 마이바티스를 사용하지 않고 직접 JDBC를 이용할 경우 개발자가 반복적으로 작성해야 할 코드가 많고 서비스 로직 코드와 쿼리를 분리하기가 어려움
 * 마이바티스는 개발자가 지정한 SQL, 저장프ㅗ시저 그리고 몇 가지 고급 매핑을 지원하는 퍼시스턴스 프레임워크, 마이바티스는 JDBC로 처리하는 상당부분의 코드와 파라미터 설정 및 결과 맵핑을 대신해줌, 마이바티스는 데이터베이스 레코드에 원시타입과 MAP 인터페이스 그리고 자바 POJO를 설정해서 매핑하기 위해 XML과 애노테이션을 사용(마이바티스 홈페이지 글)
 
-### (2) dependency 추가
-* spring boot를 사용하면 프로젝트를 만들 때 mybatis를 검색하여 dependency를 쉽게 추가 할 수 있음
-* 프로젝트 생성 후 build.gradle폴더(gradle) 또는 pom.xml(메이븐)에서 확인 할 수 있음
-* dependency 부분에 "org.mybatis.spring.boot" 가 있으면 됨
-* 프로젝트 생성 할 때 dependency 추가 하는 부분에서 jdbc도 추가 해야 되는 듯
-
-
-### (3) Mybatis 설정
+### (3) Mybatis 설정 !!!아래 4번에 정리해서 지우기!!!
 * Mysql과 연결하기 위해 만든 DatabaseConfiguration.java클래스에 추가하기
 ```java
 public class DatabaseConfiguration {
@@ -149,39 +142,20 @@ public class DatabaseConfiguration {
 * 만약, /*.xml이 없다면 mapper폴더 안에 전체를 뜻 함
 * mapper파일 만들어줘야 설정했을 때 오류 안뜸
 
-### (2) Mybatis 연결 확인
-```java
-// src/test/java/BoardApplicationTests.java 
-// JUnit을 사용하여 코드를 test하는 공간
-package com.example.demo;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class BoardApplicationTests {
-	@Autowired
-	private SqlSessionTemplate sqlSession;
-	
-	@Test
-	public void contextLoads() {
-	}
-	
-	@Test
-	public void testSqlSession() throws Exception{
-		System.out.println(sqlSession.toString());
-	}
+## 3. spring boot 에서 mybatis 설정 또 다른 방법
+### (1) build.gradle에 라이브러리 추가
+```gradle
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
 }
 ```
-* 테스트 성공하면 org.mybatis.spring.SqlSessionTemplate@103082dd 가 출력됨
+* jdbc를 같이 추가 해줘야 되는지 모르겠지만 같이 추가해줌
 
-## 3. mysql과 mybatis의 config의 전체적 코드
+### (2) configuration 클래스 생성
 ```java
+// com/example/domain/configuation/MybaticConfiguration 파일경로
+
 package com.example.domain.config;
 
 import javax.sql.DataSource;
@@ -196,29 +170,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
 @Configuration
 @PropertySource("classpath:/application.properties")
-public class ConfigApp {
-//	mybatis 연동
+public class MybaticConfiguration {
+	
 	@Autowired
 	public ApplicationContext applicationContext;
-//	mysql 연동
-	@Bean
-	@ConfigurationProperties(prefix="spring.datasource.hikari")
-	public HikariConfig hikariConfig() {
-		return new HikariConfig();
-	}
 	
-	@Bean
-	public DataSource dataSource() throws Exception{
-		DataSource dataSource = new HikariDataSource(hikariConfig());
-		System.out.println(dataSource.toString());
-		return dataSource;
-	}
-//	mybatis 연동
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception{
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -227,12 +185,10 @@ public class ConfigApp {
 		sqlSessionFactoryBean.setConfiguration(mybatisConfig());
 		return sqlSessionFactoryBean.getObject();
 	}
-	
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
-//	mybatis 맵핑 설정
 	@Bean
 	@ConfigurationProperties(prefix="mybatis.configuration")
 	public org.apache.ibatis.session.Configuration mybatisConfig(){
@@ -241,3 +197,20 @@ public class ConfigApp {
 	
 }
 ```
+1. @Configuration
+* 환경설정 이라고 선언하는 어노테이션
+
+### (3) application.properties 에서 mybatis설정 넣기
+```properties
+<!-- application.properties -->
+mybatis.type-aliases-package=com.example.domain.model
+mybatis.configuration.map-underscore-to-camel-case=true
+```
+1. mybatis.type-aliases-package
+* 
+
+2. mybatis.configuration.map-underscore-to-camel-case
+* DTO의 카멜형태와 sql의 언더형태와 맵핑하게 하는 설정
+* 즉, DTO의 변수 이름이 testId랑 컬럼명 test_id랑 서로 맵핑 됨
+* 위 설정이 없으면 맵핑이 안됨
+
