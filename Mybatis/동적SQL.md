@@ -9,12 +9,12 @@
 ### (2) 예제
 ```xml
 <select id="TargetInfoList" resultType="com.example.domain.dto.TargetDto">
-    select *
-    from target
-    where t_name = "제니"
-    <if test="t_depart != null">
-      and t_id = "40"
-    </if>
+  select *
+  from target
+  where t_name = "제니"
+  <if test="t_depart != null">
+    and t_id = "40"
+  </if>
 </select>
 ```
 * target테이블에서 t_name컬럼의 값이 "제니"인 컬럼전부를 가져옴
@@ -29,21 +29,25 @@
 
 ### (2) 예제
 ```xml
-
+<select id="">
+  select *
+  from table
+  <where>
+    <if>
+    </if>
+    <if>
+    </if>
+    <if>
+    </if>
+  </where>
+</select>
 ```
 
-
-## 4. choose
-
-## 5. when
+## 4. choose(when, otherwise)
 
 
-### (4) otherwise
-* 다중 조건문
-
-
+## 5. set
 ### (5) trim
-### (7) set
 ### (8) foreach
 ### (9) script
 ### (10) bind
