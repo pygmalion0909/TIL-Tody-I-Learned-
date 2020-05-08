@@ -548,6 +548,79 @@ export { registerUser };
 * 이제 instansce변수를 사용하여 원하는 통신방식을 설정하고 파라미터 값을 넘기면 됨
 * 첫번째 자리에는 중복되지 않는 url, 두번째 자리는 api요청에 필요한 파라미터
 
+## 14. 로그인 구성 짜기
+
+## 15. 에러 처리
+* try, catch문을 사용하여 에러가 발생시 원인을 자세히 알 수 있게 함
+* 서버로 부터 받은 메세지는 console에 찍지말고 바로 화면에 표시해줘야함
+
+```js
+
+```
+
+## 16. 유효성 검사
+* form양식에서 유효성 검사
+
+## 17. main페이지 만들기
+
+## 18. programmatic navigation(vue-router 관련)
+* 로그인 후 로그인에 성공하면 main페이지로 이동함
+```js
+// 아래 코드를 사용하여 이동함
+this.$router.push('/main');
+```
+* push괄호 안에는 이동할 url을 입력 하면 입력한 url로 이동 함
+
+## 19. vuex 설치 및 사용
+### (1) 설치
+```js
+npm i vuex
+```
+* 계층으로 이루어진 컴포넌트 끼리 통신할 때 편하게 하기 위해 사용
+* vuex에 store의 기능을 사용하여 통신할 내용을 한 곳에 모아 편하게 사용
+
+### (2) store폴더 생성
+```js
+// src/store/index.js
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    username: '',
+  },
+});
+```
+1. import Vue from 'vue';
+* vue를 가져옴
+
+2. Vue.use(Vuex);
+* vue에 vuex를 사용하겠다고 선언?!
+
+2. import Vuex from 'vuex';
+* 설치한 vuex를 가져옴
+
+3. export default new Vuex.Store;
+* vuex 인스턴스에 코드를 작성
+
+```js
+// main.js
+import Vue from 'vue';
+import App from './App.vue';
+import router from '@/routes/index';
+import store from '@/store/index';
+
+Vue.config.productionTip = false;
+
+new Vue({
+  render: h => h(App),
+  router,
+  store,
+}).$mount('#app');
+```
+* store를 불러오고 vue인스턴스에 store을 넣게 되면 이제 vue랑 store파일이랑 연결 됨
 
 
 
@@ -559,9 +632,13 @@ export { registerUser };
 3. 절대경로 설정
 4. vue-router설치 및 설정,사용
 5. 회원가입 코드 구성
-6. axios 설정
-7. 
-8. 
+6. axios 설정 및 url 설정
+7. 로그인 코드 구성
+8. 에러 처리
+9. 유효성검사(val)
+10. main페이지 만들기
+11. 로그인 후 메인페이지로 이동, programmatic navigation(vue-router 관련)
+11. 뷰엑스 설치(store)
 
 
 # 정리
@@ -590,3 +667,5 @@ export { registerUser };
 import VueRouter from 'vue-router'; )
 5. 아래 코드는 vueRouter를 사용하겠다고 선언, 꼭 필요한 선언임, 정확한 의미는 모름, ( Vue.use(VueRouter) )
 6. ( export default new VueRouter({}) )
+
+## 3. 에러처리
