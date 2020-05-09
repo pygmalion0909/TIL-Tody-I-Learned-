@@ -30,7 +30,7 @@
 ### (7) /users/{id}/posts/{post_id}
 * 특정 users가 작성한 포스트 상세페이지 조회
 
-## 3. controller 연습
+## 3. controller 연습(return을 객체로 반환)
 ```java
 // controller
 @RestController
@@ -93,5 +93,44 @@ public calss HelloWroldBean(){
 * 코드를 보고 느낌으로 알자
 
 ```js
+@RestController
+public class UserController {
+	
+	private UserService service;
+	
+	public UserController(UserService service) {
+		this.service = service;
+	}
+	
+	@GetMapping("/users")
+	public List<UserDto> retrieveAllUsers(){
+		return service.findAll();
+	}
+	
+}
 
+// @Autowired 사용
+@RestController
+public class UserController {
+  @Autowired
+	private UserService service;
+	
+	@GetMapping("/users")
+	public List<UserDto> retrieveAllUsers(){
+		return service.findAll();
+	}
+}
 ```
+1. private UserService service;
+* controller에서 사용할 UserService의 변수를 선언
+* 지금 상태는 service라는 변수가 UserService라는 데이터 타입을 가지고 있다는 의미일 뿐 아래의 코드를 작성해야 의존성이 주입 됨
+
+2. public UserController(UserService service) { this.service = service; }
+* UserController의 생성자를 만들어 UserService를 위에서 선언한 변수 service에 값을 할당 함
+* 이렇게 할 경우 의존성이 주입되어 controller에서 해당 service를 사용 가능
+* @Autowired 어노테이션을 사용하여 쉽게 처리 가능
+
+## 6. http코드 제어
+* 예를 들어 사용자가 회원가입할 경우 회원가입에 성공할 경우 일반적으로 http값으로 200번을 리턴 시킴, 하지만 http를 조작하여 회원가입에 성공 시 201 created라는 값을 리턴 시켜 요청에 대한 쫌 더 명확한 http값을 전달 해야 좋은 api임
+
+
