@@ -133,4 +133,6 @@ public class UserController {
 ## 6. http코드 제어
 * 예를 들어 사용자가 회원가입할 경우 회원가입에 성공할 경우 일반적으로 http값으로 200번을 리턴 시킴, 하지만 http를 조작하여 회원가입에 성공 시 201 created라는 값을 리턴 시켜 요청에 대한 쫌 더 명확한 http값을 전달 해야 좋은 api임
 
+## 7. validation
+* 전달 받은 값의 유효성 검사
 
