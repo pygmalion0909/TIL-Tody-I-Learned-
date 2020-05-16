@@ -136,3 +136,68 @@ public class UserController {
 ## 7. validation
 * 전달 받은 값의 유효성 검사
 
+## 8. filtering(@JsonIgnore)
+* 데이터를 프론트로 보낼 때 필터해서 보내고 싶은 데이터만 보내는 방법
+* 즉, 외부에 노출시키고 싶지 않은 데이터를 걸러서 보냄
+### (1) 방법
+1. dto에 @JsonIgnore어노테이션을 추가하여 제어 가능 
+2. 또한 @JsonIgnoreProoerties(value={"a", "b"})을 사용하여 필터 할 수 있음
+3. @JsonFilter() 사용하여 제어 가능
+
+### (2) 예제
+```java
+public class User{
+	private String name;
+	@JsonIgnore
+	private String password;
+	@JsonIgnore
+	private String ssn;
+}
+```
+* 위와 같이 jsonIgnore을 사용하여 원하는 필드값을 제어 가능함
+
+```java
+@JsonIgnoreProoerties(value={"password", "ssn"})
+public class User{
+	private String name;
+	private String password;
+	private String ssn;
+}
+```
+* 또 다른 방법으로 위와 같은 방법이 있음
+
+```java
+
+```
+
+## 9. @RequestMapping("")
+* controller에 공통된 url을 한 RequestMapping어노테이션에 지정하여 중복 작성을 하지 않아도 됨
+```java
+@RestController
+@RequestMapping("/admin")
+public calss AdminUserController{
+	@GetMapping("/user1")
+	public String user1 () {
+		return ""
+	}
+	@GetMapping("/user2")
+	public String user2 () {
+		return ""
+	}
+}
+```
+* 모든 경로에 /admin/user1, /admin/user2 이렇게 적용됨
+
+
+
+## 1000. Rest api 설계 시 고려사항
+### (1) 설계 단계
+1. 1단계 : 적절한 url을 설계 하기
+2. 2단계 : http 메소드(post, get, put, delete)를 적절하게 사용하기
+3. 3단계 : 데이터를 적절하게 보내기
+
+### (2) 주의사항
+1. response status를 적절하게 표시하기(200, 404, 400 etc)
+2. 예를 들어 user의 모든 정보를 가져오는 url이면 "/users"라는 복수 형태로 user전체를 의미하는 url를사용하고 특정 user을 가져오는 url은 "/users/1"라고 사용하는게 좋음
+3. url은 명사형태로 나타내는게 좋음
+
