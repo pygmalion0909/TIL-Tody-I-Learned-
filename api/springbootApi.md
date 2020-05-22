@@ -190,6 +190,18 @@ public calss AdminUserController{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## 1000. Rest api 설계 시 고려사항
 ### (1) 설계 단계
 1. 1단계 : 적절한 url을 설계 하기
