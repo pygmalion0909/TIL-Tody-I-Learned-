@@ -1,31 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <table>
-    <thead>
-      <th>순번</th>
-      <th>글제목</th>
-      <th>등록자</th>
-      <th>등록일시</th>
-      <th>조회수</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>첫번째 글</td>
-        <td>superpil</td>
-        <td>2020-04-18</td>
-        <td>1</td>
-      </tr>
-    </tbody>
-  </table>
-
-
-
-</body>
-</html>
+<template>
+    <div>
+      <div class="popup_wrap">
+        <div class="popup">
+          <div class="tit_wrap">
+            <span class="tit">{{$t('AgentVersionUpdatePopup.item.agentUpdate')}}</span>
+          </div>
+          <div class="form_wrap mt20" >
+              <label for="">에이전트 이름: </label><span>{{agentName}}</span>
+              <form id="contVerUpdate" >
+                <strong class="form_lst em fl">{{$t('AgentVersionUpdatePopup.text.fileUpload')}}</strong>
+                <div class="form_wrap">
+                  <label class="form_lst ml10" style="width:auto">{{$t('LIST.ITEM.AGENT')}}</label>
+                  <input type="text" class="w300" readonly v-model="filename" @keydown.prevent/>
+                  <input type="file" id="robotUpload" @change="getFile">
+                  <label for="robotUpload" class="btnBlue ml10">{{$t('COMMON.BTN.FILE_UPLOAD')}}</label>
+                  <br/>
+                  <div class="mt10" style="margin-left:85px">
+                    <input type="radio" id="majorUpdate" name="update"   value='major' v-model="version"/>
+                    <!-- 메이저 버전 -->
+                    <label for="majorUpdate">
+                      <span></span>{{$t('AgentVersionUpdatePopup.dropList.majorUpdate')}} {{majorVersion}}</label>
+                      <br>
+                      <input type="radio" id="minorUpdate" name="update" value='minor' v-model="version" />
+                      <!-- 마이너 버전 -->
+                    <label for="minorUpdate">
+                      <span></span>{{$t('AgentVersionUpdatePopup.dropList.minorUpdate')}} {{minorVersion}}</label>
+                  </div>
+                </div>
+                <span class="dp red ml20 error" style="margin-left:110px" v-if="errors.has('agentFile')">{{errors.first('agentFile')}}</span>
+                <div class="dp mt20">
+                  <strong class="form_lst em fl">{{$t('LIST.ITEM.UPDATE_DETAILS')}}</strong>
+                  <!-- 개발후 활성화 시키기 -->
+                  <textarea class="wide" style="width:570px" type="text" @keyup="updateLengthCheck" v-model="updateNote" maxlength="1000"></textarea>
+                </div>
+                <span class="dp red ml20 error" style="margin-left:110px" v-if="errors.has('updateNote')">{{errors.first('updateNote')}}</span>
+                <div class="wrap_alignR mt20 tr">
+                  <input type="button" class="btnNavy btnLarge mr10" :value="$t('COMMON.BTN.SAVE')" @click="onSubmit"/>
+                  <input type="button" class="btnGray btnLarge mr10" :value="$t('COMMON.BTN.CNCL')" @click="onClose"/>
+                  <p class="emphasis mt10 mr10">{{$t('ALERT.MSG.REQUIRED_FIELDS')}}</p>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+      <registing-popup v-show="registModal"  ref='registPopup'></registing-popup>
+    </div>
+      </template>
+    
+    <script>
+    import { mapActions } from 'vuex';
+    import Constant from '../../Constant';
+    import RegistingPopup from './RegistingPopup';
+    import helper from '@/utils/helper';
+    
+    export default {
+        props: ['agentId', 'agentName', 'versionCheck'],
+        $_veeValidate: {
+            validator: 'new',
+        },
+        data: () => ({
+            updateNote: '',
+            agentFile: '',
+            version: 'minor',
+            filename:'',
+            agentFileId: '',
+            registModal: false,
+            majorVersion: '',
+            minorVersion: '',
+        }),
+        components: {
+            'registing-popup' : RegistingPopup,
+        },
+        async created() {
+            this.agentFileId = this.agentId;
+            console.log( parseFloat(this.versionCheck));
+            this.majorVersion = parseFloat(this.versionCheck) + 0.1;
+            this.minorVersion = parseFloat(this.versionCheck) + 0.1;
+        },
+    
+        methods: {
+            ...mapActions([
+                Constant.MODIFY_AGENTFILE
+            ]),
+            async getFile(e) {
+                if(!e.target.files[0]) return;
+                let reader = new FileReader();
+                const maxSize = 1 * 1024 * 1024 * 100;
+                if(e.target.files[0].size > maxSize) {
+                    await alert(this.$t('ALERT.MSG.SIZE_LIMIT_100M'));
+                    e.target.value = '';
+                    return;
+                }
+                const fileExtension = e.target.files[0].name.split('.').pop();
+                if(fileExtension !== 'zip' ){
+                    await alert(this.$t('ALERT.MSG.ONLY_ZIP'));
+                    e.target.value = '';
+                    return;
+                }
+                this.filename = e.target.files[0].name;
+                reader.readAsDataURL(e.target.files[0]);
+                reader.onload = async () => {
+                    this.agentFile = reader.result;
+                };
+                await helper.delay(300);
+                e.target.value = '';
+    
+            },
+            async onSubmit() {
+                this.agentFileId = this.agentId;
+                const payload = {
+                    updateNote : this.updateNote,
+                    agentFile : this.agentFile,
+                    version : this.version,
+                    filename : this.filename,
+                    id : this.agentFileId,
+                };
+                const validate = await this.$validator.validateAll();
+    
+                if (this.agentFile === null || this.agentFile === '') {
+                    this.errors.add({
+                        field: 'agentFile',
+                        msg: this.$t('ALERT.MSG.CHK_AGENT_FILE'),
+                        id: 'updateNote',
+                    });
+                    return false;
+                } else {
+                    this.errors.remove('agentFile');
+                }
+    
+                if (this.updateNote === null || this.updateNote === '') {
+                    this.errors.add({
+                        field: 'updateNote',
+                        msg: this.$t('ALERT.MSG.REQUIRED_DETAIL_FIELD'),
+                        id: 'updateNote',
+                    });
+                    return false;
+                } else{
+                    this.errors.remove('updateNote');
+                }
+    
+                this.$refs.registPopup;
+                this.registModal = true;
+                try {
+                    await this.modifyAgentFile( {agentFileId :  this.agentFileId, payload});
+                    this.registModal = false;
+                    await alert(this.$t('ALERT.MSG.SUCC_REGI_AGENT'));
+                    this.agentFile = '';
+                    this.filename = '';
+                    this.updateNote = '';
+                    this.version = 'minor';
+                    this.$emit('close');
+                } catch(error) {
+                    this.registModal = false;
+                }
+            },
+            async onClose() {
+                if(await confirm(this.$t('CONFIRM.MSG.CNCL_UPDATE'), this.$t('COMMON.BTN.YES'), this.$t('COMMON.BTN.NO'))){
+                    this.agentFile = '';
+                    this.filename = '';
+                    this.updateNote = '';
+                    this.version = 'minor';
+                    this.$emit('close');
+                }
+            },
+            updateLengthCheck() {
+                this.updateNote = this.updateNote.substring(0, 1000);
+            },
+        },
+    };
+    </script>
