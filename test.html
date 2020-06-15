@@ -1,0 +1,215 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<!-- BEGIN HEAD -->
+<head>
+
+<!-- INCLUDE GLOBAL HEADER -->
+<jsp:directive.include file="/WEB-INF/jsp/cmm/include/global.jsp" />
+
+<!-- INCLUDE THEME STYLE -->
+<jsp:directive.include file="/WEB-INF/jsp/cmm/include/theme.jsp" />
+
+</head>
+<!-- END HEAD -->
+<body class="page-container-bg-solid">
+	<div class="page-wrapper">
+		<!-- INCLUDE GNB -->
+		<jsp:directive.include file="/WEB-INF/jsp/cmm/include/gnb.jsp" />
+		<div class="page-wrapper-row full-height">
+			<div class="page-wrapper-middle">
+				<!-- BEGIN CONTAINER -->
+				<div class="page-container">
+					<!-- BEGIN CONTENT -->
+					<div class="page-content-wrapper">
+						<!-- BEGIN CONTENT BODY -->
+						<!-- BEGIN PAGE HEAD-->
+						<div class="page-head">
+							<div class="container">
+								<!-- BEGIN PAGE TITLE -->
+								<div class="page-title">
+									<h1>
+										자동메시징 <small>목록</small>
+									</h1>
+								</div>
+								<!-- END PAGE TITLE -->
+							</div>
+						</div>
+						<!-- END PAGE HEAD-->
+						<!-- BEGIN PAGE CONTENT BODY -->
+						<div class="page-content">
+							<div class="container">
+								<!-- BEGIN PAGE BREADCRUMBS -->
+								<ul class="page-breadcrumb breadcrumb">
+									<li><a href="main.html">Home</a> <i class="fa fa-circle"></i></li>
+									<li><span>자동메시징</span> <i class="fa fa-circle"></i></li>
+									<li><span>목록</span></li>
+								</ul>
+								<!-- END PAGE BREADCRUMBS -->
+								<!-- BEGIN PAGE CONTENT INNER -->
+								<div class="page-content-inner">
+									<div class="row">
+										<div class="col">
+											<!-- BEGIN BORDERED TABLE PORTLET-->
+											<div class="portlet light">
+												<div class="portlet-body">
+													<div class="dataTables_wrapper">
+														<form:form commandName="autoMsgCond" id="srchForm" name="srchForm">
+															<input type="hidden" id="pageIndex" name="pageIndex" value="<c:out value='${paginationInfo.currentPageNo}'/>" />
+															<input type="hidden" id="search_type" name="searchType" value="${autoMsgCond.searchType}" />
+															<div class="row">
+																<div class="col-md-8 col-sm-8 tmss-align-left">
+																	<div class="form-group">
+																		<select id="serv_type" name="serv_type" class="form-control input-inline">
+																			<option value="" <c:if test="${null == autoMsgCond.serv_type or empty autoMsgCond.serv_type}">selected="selected"</c:if>>서비스</option> ${cmmUtil:getCodeToHTMLByOption(pageContext.request,'5010',autoMsgCond.serv_type)}
+																		</select>
+																		<select id="chn_type" name="chn_type" Class="form-control input-inline">
+																			<option value="" <c:if test="${null == autoMsgCond.chn_type or empty autoMsgCond.chn_type}">selected="selected"</c:if>>채널</option>
+																			<option value="${CD_CHN_EMAIL}" <c:if test="${autoMsgCond.chn_type eq CD_CHN_EMAIL}">selected</c:if>>EMAIL</option>
+																			<option value="${CD_CHN_INSTANT}" <c:if test="${autoMsgCond.chn_type eq CD_CHN_INSTANT}">selected</c:if>>SMS</option>
+																		</select>
+																		<select id="snd_purp" name="snd_purp" Class="form-control input-inline">
+																			<option value="" <c:if test="${null == autoMsgCond.snd_purp or empty autoMsgCond.snd_purp}">selected="selected"</c:if>>발송목적</option>
+																			<option value="${CD_PURP_AD}" <c:if test="${autoMsgCond.snd_purp eq CD_PURP_AD}">selected</c:if>>광고성</option>
+																			<option value="${CD_PURP_INFO}" <c:if test="${autoMsgCond.snd_purp eq CD_PURP_INFO}">selected</c:if>>정보성</option>
+																		</select>
+																		<select id="use_yn" name="use_yn" Class="form-control input-inline">
+																			<option value="" <c:if test="${null == autoMsgCond.use_yn or empty autoMsgCond.use_yn}">selected="selected"</c:if>>상태</option>
+																			<option value="Y" <c:if test="${autoMsgCond.use_yn eq 'y' || autoMsgCond.use_yn eq 'Y'}">selected</c:if>>사용</option>
+																			<option value="N" <c:if test="${autoMsgCond.use_yn eq 'n' || autoMsgCond.use_yn eq 'N'}">selected</c:if>>미사용</option>
+																		</select>
+																		<input type="search" class="form-control input-inline" placeholder="메시지명을 입력해주세요." aria-controls="sample_1" id="msg_name" name="msg_name" value="${autoMsgCond.msg_name}">
+																		<button id="searchButton" onclick="javascript:fnLinkPage(1);" class="btn btn-icon-only grey-cascade">
+																			<i class="fa fa-search"></i> </a>
+																	</div>
+																</div>
+																<div class="col-md-4 col-sm-4 tmss-align-right">
+																	<div class="form-group">
+																		<div class="btn-group">
+																			<a class="btn sbold green" href="/automsg/makeAutoMsg.do"> 자동메시징 생성 <i class="fa fa-plus"></i></a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</form:form>
+														<div class="table-scrollable">
+															<table class="table table-bordered table-hover tmss-table-list">
+																<thead>
+																	<tr>
+																		<th width="45">번호</th>
+																		<th>메시지명</th>
+																		<th width="100">서비스</th>
+																		<th width="80">채널</th>
+																		<th width="80">발송목적</th>
+																		<th width="130">수정일자</th>
+																		<th width="80">사용여부</th>
+																		<th width="150">수정/삭제</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<c:choose>
+																		<c:when test="${fn:length(messages) > 0}">
+																			<c:forEach items="${messages}" var="it" varStatus="status">
+																				<tr>
+																					<td>${it.dataidx}</td>
+																					<td class="tmss-align-left">${it.msg_name}</td>
+																					<td>${it.serv_type}</td>
+																					<td>${it.chn_name}</td>
+																					<td>${it.purp_name}</td>
+																					<fmt:parseDate var="modify_dt" value="${it.modify_dt}" pattern="yyyy-MM-dd HH:mm:ss.SS" scope="page" />
+																					<fmt:formatDate var="modify_dt_str" value="${modify_dt}" pattern="yyyy-MM-dd HH:mm" />
+																					<td>${modify_dt_str}</td>
+																					<c:choose>
+																						<c:when test="${it.use_yn eq 'Y'}">
+																							<td>사용</td>
+																						</c:when>
+																						<c:otherwise>
+																							<td>미사용</td>
+																						</c:otherwise>
+																					</c:choose>
+																					<td>
+																						<a href="/automsg/modifyAutoMsg.do?msg_id=${it.msg_id}" class="btn btn-outline btn-xs grey-cascade write_auth"><i class="fa fa-edit"></i> 수정 </a>
+																						<a href="javascript:fnDeleteAutoMessage('${it.msg_id}');" class="btn btn-outline btn-xs grey-cascade write_auth"><i class="fa fa-trash-o"></i> 삭제 </a>
+																					</td>
+																				</tr>
+																			</c:forEach>
+																		</c:when>
+																		<c:otherwise>
+																			<tr>
+																				<td colspan="8">조회된 데이터가 없습니다.</td>
+																			</tr>
+																		</c:otherwise>
+																	</c:choose>
+																</tbody>
+															</table>
+														</div>
+														<div class="row">
+															<div class="col-md-5 col-sm-5">
+																<c:set var="firstIndex" value="${(paginationInfo.currentPageNo-1)*paginationInfo.recordCountPerPage}" />
+																<div class="dataTables_info">${paginationInfo.totalRecordCount}개결과 중에서 ${firstIndex+1}-${firstIndex+fn:length(messages)} 보는 중</div>
+															</div>
+															<div class="col-md-7  col-sm-7">
+																<div class="dataTables_paginate paging_bootstrap_full_number">
+																	<ul class="pagination pagination-sm">
+																		<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fnLinkPage" />
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- END BORDERED TABLE PORTLET-->
+										</div>
+									</div>
+								</div>
+								<!-- END PAGE CONTENT INNER -->
+							</div>
+						</div>
+						<!-- END PAGE CONTENT BODY -->
+						<!-- END CONTENT BODY -->
+					</div>
+					<!-- END CONTENT -->
+				</div>
+				<!-- END CONTAINER -->
+			</div>
+		</div>
+		
+		<!-- INCLUDE FOOTER -->
+		<jsp:directive.include file="/WEB-INF/jsp/cmm/include/footer.jsp" />
+		
+	</div>
+	
+	<!-- INCLUDE PLUGIN -->
+	<jsp:directive.include file="/WEB-INF/jsp/cmm/include/plugin.jsp" />
+	
+	<!-- BEGIN PAGE LEVEL SCRIPTS -->
+	<script type="text/javascript" src="<c:url value='/js/script/automsg/selectAutoMsgList.js'/>"></script>
+	<!-- END PAGE LEVEL SCRIPTS -->
+	<script>
+		$(document).ready(
+				function() {
+					if ('${autoMsgCond.searchCondition}')
+						$('#searchCondition').val(
+								'${autoMsgCond.searchCondition}').change();
+					onChangeSearchType();
+					mapEnterToClick("#searchKeyword", "#searchButton");
+				});
+
+		function onChangeSearchType() {
+			var string_list = [ "msg_name", "rgst_user" ];
+			var idx = string_list.indexOf($('#searchCondition').val());
+
+			if (0 > idx) {
+				$('#search_type').val("");
+			} else {
+				$('#search_type').val("string");
+			}
+		}
+
+		$('#searchCondition').bind("change", function() {
+			onChangeSearchType();
+		});
+	</script>
+</body>
+</html>
